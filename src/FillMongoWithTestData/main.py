@@ -22,11 +22,16 @@ def put_string_into_db(sha256, platform, file_size, sample_set, mongo_collection
 
 def hash_string_and_save_to_file_in_folder(hash_target, folder):
     sha256_of_string = hashlib.sha256(hash_target.encode('utf-8')).hexdigest()
-    file_path = f"{folder}/" + f"{sha256_of_string[0:2]}/" + f"{sha256_of_string[2:4]}/" + sha256_of_string
+    file_path = (
+        f"{folder}/"
+        + f"{sha256_of_string[:2]}/"
+        + f"{sha256_of_string[2:4]}/"
+        + sha256_of_string
+    )
+
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
-    file = open(file_path, 'w+')
-    file.write(hash_target)
-    file.close()
+    with open(file_path, 'w+') as file:
+        file.write(hash_target)
     return sha256_of_string
 
 
